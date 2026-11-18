@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="theme-color" content="#164B3B">
+  <meta name="description" content="Resource portal for the QGIS Advanced Training for Local Roads and Bridges Inventory (LRBI) — datasets, presentations, and downloadable GIS assets.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23164B3B'/%3E%3Cpath d='M16 6l9 5-9 5-9-5 9-5z' fill='%23E6EFE8'/%3E%3C/svg%3E">
+  <title>QGIS Advanced Training — LRBI Resource Portal</title>
+
+  <!--
+    ============================================================================
+    GOOGLE SITES EMBED NOTE
+    ----------------------------------------------------------------------------
+    This file is 100% self-contained: no external CSS, JS, fonts, or images.
+    All links are controlled by TRAINING_CONFIG near the bottom of this file.
+    Search for "REPLACE YOUR GOOGLE SITES URLS HERE" to configure navigation.
+    ============================================================================
+  -->
+
+  <style>
+    /* ======================================================================
+       1. DESIGN TOKENS
+       ====================================================================== */
+    :root {
+      --green-950: #0B2E24;
+      --green-900: #103A2D;
+      --green-800: #164B3B;
+      --green-700: #1E5B47;
+      --green-600: #247258;
+      --accent-teal: #2C8C85;
+      --accent-qgis: #589632;
+      --sage: #E6EFE8;
+      --sage-soft: #F1F6F2;
+      --bg: #F7F9F7;
+      --ink: #263238;
+      --muted: #5C6B64;
+      --line: #DCE6DE;
+      --white: #FFFFFF;
+
+      --radius: 16px;
+      --shadow-sm: 0 1px 2px rgba(16, 58, 45, .05), 0 8px 24px rgba(16, 58, 45, .05);
+      --shadow-lg: 0 18px 42px rgba(16, 58, 45, .14), 0 3px 10px rgba(16, 58, 45, .06);
+
+      /* Inter and Roboto first; system fallbacks keep the page self-contained. */
+      --font: "Inter", "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      --mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+    }
+
+    /* ======================================================================
+       2. RESET & BASE
+       ====================================================================== */
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    html, body { overflow-x: hidden; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      color: var(--ink);
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(rgba(22, 75, 59, .025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(22, 75, 59, .025) 1px, transparent 1px);
+      background-size: 48px 48px;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    svg { display: block; }
+    a { color: inherit; }
+    [hidden] { display: none !important; }
+    section, div { scroll-margin-top: 16px; }
+    .icon {
+      width: 24px; height: 24px; flex: none;
+      fill: none; stroke: currentColor; stroke-width: 1.7;
+      stroke-linecap: round; stroke-linejoin: round;
+    }
+    .icon--sm { width: 17px; height: 17px; }
+    .icon--xs { width: 14px; height: 14px; }
+    .container { width: 100%; max-width: 1220px; margin-inline: auto; padding-inline: clamp(20px, 5vw, 48px); }
+
+    :focus-visible { outline: 3px solid var(--accent-teal); outline-offset: 3px; border-radius: 4px; }
+    .hero :focus-visible, .footer :focus-visible { outline-color: #BFE6C7; }
+    section:focus { outline: none; }
+
+    .skip-link {
+      position: absolute; left: 14px; top: -60px; z-index: 200;
+      padding: 12px 16px; border-radius: 8px; background: var(--green-900); color: #fff;
+      font-size: .8rem; font-weight: 700; text-decoration: none;
+      transition: top .2s ease;
+    }
+    .skip-link:focus { top: 12px; }
+
+    /* ======================================================================
+       3. HEADER
+       ====================================================================== */
+    .site-header {
+      position: relative; z-index: 5;
+      background: rgba(247, 249, 247, .94);
+      border-bottom: 1px solid var(--line);
+    }
+    .header-inner { min-height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; }
+    .brand__mark {
+      width: 40px; height: 40px; flex: none; border-radius: 10px;
+      display: grid; place-items: center; color: #DFF0E3;
+      background: var(--green-800); box-shadow: 0 6px 16px rgba(22, 75, 59, .18);
+    }
+    .brand__mark .icon { width: 22px; height: 22px; }
+    .brand__text { display: flex; flex-direction: column; line-height: 1.15; }
+    .brand__name { font-size: .84rem; font-weight: 800; letter-spacing: .11em; color: var(--green-900); }
+    .brand__sub { margin-top: 3px; font-size: .6rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+    .header-tools { display: flex; align-items: center; gap: 10px; }
+    .header-status {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 12px;
+      border: 1px solid var(--line); border-radius: 999px; background: #fff;
+      font-size: .6rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green-700);
+    }
+    .chip-dot { width: 7px; height: 7px; flex: none; border-radius: 50%; background: var(--accent-qgis); box-shadow: 0 0 0 3px rgba(88, 150, 50, .15); }
+    .header-nav { display: flex; align-items: center; gap: 4px; }
+    .header-nav a {
+      padding: 10px 12px; border-radius: 8px; text-decoration: none;
+      font-size: .68rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted);
+      transition: background .2s ease, color .2s ease;
+    }
+    .header-nav a:hover { background: var(--sage); color: var(--green-800); }
+
+    /* ======================================================================
+       4. HERO
+       ====================================================================== */
+    .hero {
+      position: relative; overflow: hidden; color: #fff;
+      background:
+        radial-gradient(circle at 78% 26%, rgba(44, 140, 133, .38), transparent 46%),
+        linear-gradient(135deg, #0E3428 0%, #164B3B 56%, #113E30 100%);
+    }
+    .hero::after {
+      content: ""; position: absolute; inset: auto 0 0 0; height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.28), transparent);
+    }
+    .hero__decor { position: absolute; inset: 0; pointer-events: none; }
+    .hero__decor svg { width: 100%; height: 100%; }
+    .hero__inner {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr);
+      gap: clamp(32px, 5vw, 70px); align-items: center;
+      padding-block: clamp(56px, 7vw, 92px);
+    }
+    .hero__copy { min-width: 0; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px; margin: 0 0 22px;
+      font-size: .68rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--green-700);
+    }
+    .eyebrow--light { color: #BFE6C7; }
+    .eyebrow__dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-teal); box-shadow: 0 0 0 4px rgba(44,140,133,.15); }
+    .eyebrow--light .eyebrow__dot { background: #8DD9A8; box-shadow: 0 0 0 4px rgba(141,217,168,.16); }
+    .eyebrow__line { width: 26px; height: 1px; background: currentColor; opacity: .6; }
+    .hero h1 {
+      margin: 0; text-transform: uppercase; font-weight: 800;
+      font-size: clamp(2.35rem, 5.2vw, 4.35rem); line-height: 1.02; letter-spacing: -.028em;
+    }
+    .hero h1 span { display: block; color: #C7E6CE; }
+    .hero__rule { width: 66px; height: 3px; margin: 24px 0 20px; border-radius: 3px; background: var(--accent-qgis); }
+    .hero__subtitle { margin: 0 0 16px; font-size: clamp(1rem, 2vw, 1.24rem); font-weight: 650; color: #DCEFE0; }
+    .hero__lead { margin: 0; max-width: 54ch; font-size: clamp(.94rem, 1.5vw, 1.05rem); line-height: 1.75; color: rgba(255,255,255,.74); }
+    .hero__actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      min-height: 48px; padding: 0 20px; border-radius: 10px;
+      font-size: .72rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; text-decoration: none;
+      transition: transform .22s ease, background .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+    .btn .icon { width: 16px; height: 16px; }
+    .btn--primary { background: var(--sage); color: var(--green-900); box-shadow: 0 8px 20px rgba(0,0,0,.12); }
+    .btn--primary:hover { background: #fff; transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,0,0,.18); }
+    .btn--ghost { color: #fff; border: 1px solid rgba(255,255,255,.4); background: rgba(255,255,255,.04); }
+    .btn--ghost:hover { background: rgba(255,255,255,.13); border-color: rgba(255,255,255,.7); transform: translateY(-2px); }
+    .hero__meta { display: flex; flex-wrap: wrap; gap: 8px 20px; margin: 30px 0 0; padding: 0; list-style: none; }
+    .hero__meta li { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: .6rem; letter-spacing: .09em; color: rgba(255,255,255,.55); }
+    .hero__meta li::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: #8DD9A8; }
+
+    .hero__visual { min-width: 0; }
+    .map-card {
+      position: relative; overflow: hidden; isolation: isolate;
+      border: 1px solid rgba(255,255,255,.16); border-radius: 18px;
+      background: #10382C; box-shadow: 0 24px 60px rgba(3,25,18,.38);
+    }
+    .map-svg { width: 100%; height: auto; }
+    .map-card__chip {
+      position: absolute; z-index: 2; top: 16px; left: 16px;
+      display: inline-flex; align-items: center; gap: 8px; padding: 7px 11px;
+      border: 1px solid rgba(255,255,255,.15); border-radius: 6px;
+      background: rgba(9,37,28,.72); color: #D7EBDC;
+      font-size: .58rem; font-weight: 700; letter-spacing: .14em;
+    }
+    .map-card__chip .chip-dot { background: #8DD9A8; box-shadow: 0 0 0 3px rgba(141,217,168,.16); }
+    .map-card__foot {
+      position: absolute; z-index: 2; left: 16px; right: 16px; bottom: 11px;
+      display: flex; justify-content: space-between; gap: 10px;
+      font-family: var(--mono); font-size: .53rem; letter-spacing: .08em; color: rgba(255,255,255,.5);
+    }
+    .map-route--flow { animation: routeFlow 14s linear infinite; }
+    .map-node__pulse {
+      fill: none; stroke: #BFE6C7; stroke-width: 1;
+      transform-box: fill-box; transform-origin: center;
+      animation: nodePulse 3.4s ease-out infinite;
+    }
+    .map-node:nth-child(2) .map-node__pulse { animation-delay: .7s; }
+    .map-node:nth-child(3) .map-node__pulse { animation-delay: 1.4s; }
+    .map-node:nth-child(4) .map-node__pulse { animation-delay: 2.1s; }
+    .map-node__dot { fill: #E8F5EA; stroke: #164B3B; stroke-width: 1.4; }
+    @keyframes routeFlow { to { stroke-dashoffset: -120; } }
+    @keyframes nodePulse { 0% { transform: scale(.45); opacity: .75; } 100% { transform: scale(2.1); opacity: 0; } }
+    .hero__strip { position: relative; z-index: 1; border-top: 1px solid rgba(255,255,255,.1); }
+    .hero__strip .container {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 24px;
+      padding-block: 14px; font-family: var(--mono); font-size: .58rem; letter-spacing: .1em; color: rgba(255,255,255,.46);
+    }
+
+    /* ======================================================================
+       5. SECTIONS & SHARED HEADERS
+       ====================================================================== */
+    .section { padding-block: clamp(56px, 8vw, 96px); }
+    .section--tinted {
+      background: linear-gradient(180deg, #F2F7F3 0%, #EEF5F0 100%);
+      border-block: 1px solid var(--line);
+    }
+    .section-head {
+      display: flex; align-items: flex-end; justify-content: space-between; gap: 24px;
+      margin-bottom: clamp(30px, 4vw, 46px);
+    }
+    .section-head h2 {
+      margin: 0; color: var(--green-900); font-weight: 800;
+      font-size: clamp(1.65rem, 3.2vw, 2.45rem); line-height: 1.15; letter-spacing: -.02em;
+    }
+    .section-head__lead { margin: 12px 0 0; max-width: 62ch; color: var(--muted); font-size: .93rem; line-height: 1.7; }
+    .count-chip {
+      flex: none; padding: 9px 14px; border: 1px solid var(--line); border-radius: 999px;
+      background: #fff; color: var(--green-700);
+      font-family: var(--mono); font-size: .63rem; letter-spacing: .1em;
+    }
+
+    /* ======================================================================
+       6. RESOURCE CARDS
+       ====================================================================== */
+    .resource-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr)); gap: 20px; }
+    .resource-card {
+      position: relative; isolation: isolate; overflow: hidden;
+      display: flex; flex-direction: column; min-height: 342px; padding: 26px;
+      border: 1px solid var(--line); border-radius: var(--radius); background: #fff;
+      box-shadow: var(--shadow-sm); text-decoration: none;
+      transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+    }
+    .resource-card__accent {
+      position: absolute; z-index: 3; inset: 0 0 auto 0; height: 3px;
+      background: linear-gradient(90deg, var(--accent-teal), var(--accent-qgis));
+      transform: scaleX(0); transform-origin: left center; transition: transform .35s ease;
+    }
+    .resource-card__watermark {
+      position: absolute; z-index: -1; right: -16px; bottom: -24px;
+      width: 150px; height: 150px; color: var(--green-800); opacity: .045;
+      transform: rotate(-12deg); pointer-events: none;
+    }
+    .resource-card__watermark .icon { width: 100%; height: 100%; stroke-width: 1; }
+    .resource-card__top { display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+    .icon-tile { width: 54px; height: 54px; border-radius: 14px; display: grid; place-items: center; transition: background .28s ease, color .28s ease, transform .28s ease; }
+    .icon-tile .icon { width: 26px; height: 26px; }
+    .icon-tile--data { background: #E4F2F0; color: #217A74; }
+    .icon-tile--pres { background: #EDF4E5; color: #4C822A; }
+    .icon-tile--assets { background: #E7EFE9; color: var(--green-800); }
+    .resource-card__index { font-family: var(--mono); font-size: .68rem; letter-spacing: .1em; color: #9AAAA0; }
+    .resource-card__title {
+      display: block; margin-top: 22px; color: var(--green-900);
+      font-size: 1.2rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase;
+    }
+    .resource-card__desc { display: block; margin-top: 12px; color: var(--muted); font-size: .88rem; line-height: 1.7; }
+    .resource-card__foot { margin-top: auto; padding-top: 22px; border-top: 1px solid var(--line); }
+    .card-action {
+      display: inline-flex; align-items: center; gap: 10px; min-height: 44px;
+      color: var(--green-700); font-size: .72rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase;
+    }
+    .card-action .icon { transition: transform .25s ease; }
+    .resource-card:hover, .resource-card:focus-visible { transform: translateY(-6px); border-color: #A9C9B2; box-shadow: var(--shadow-lg); }
+    .resource-card:hover .resource-card__accent, .resource-card:focus-visible .resource-card__accent { transform: scaleX(1); }
+    .resource-card:hover .icon-tile, .resource-card:focus-visible .icon-tile { background: var(--green-800); color: #E6F3E9; transform: scale(1.05); }
+    .resource-card:hover .card-action .icon, .resource-card:focus-visible .card-action .icon { transform: translateX(5px); }
+    .resource-card.is-unconfigured { border-style: dashed; }
+
+    /* ======================================================================
+       7. TRAINING MODULES
+       ====================================================================== */
+    .module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 245px), 1fr)); gap: 18px; }
+    .module-card {
+      position: relative; overflow: hidden; display: flex; flex-direction: column;
+      min-height: 236px; padding: 24px; border: 1px solid var(--line); border-radius: 14px;
+      background: #fff; text-decoration: none; color: inherit;
+      transition: transform .26s ease, box-shadow .26s ease, border-color .26s ease;
+    }
+    .module-card::before {
+      content: ""; position: absolute; inset: 0 auto 0 0; width: 3px;
+      background: var(--accent-teal); opacity: .55; transition: opacity .25s ease, width .25s ease;
+    }
+    .module-card__head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .module-card__num { font-family: var(--mono); font-size: 1.7rem; font-weight: 700; line-height: 1; color: var(--green-800); }
+    .module-card__icon { width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; background: var(--sage); color: var(--green-700); }
+    .module-card__icon .icon { width: 20px; height: 20px; }
+    .module-card h3 { margin: 20px 0 0; color: var(--green-900); font-size: .94rem; font-weight: 750; line-height: 1.45; }
+    .module-card p { margin: 10px 0 0; color: var(--muted); font-size: .82rem; line-height: 1.65; }
+    .module-card__tag { margin-top: auto; padding-top: 18px; font-family: var(--mono); font-size: .6rem; letter-spacing: .1em; color: #8B9C91; }
+    a.module-card:hover, a.module-card:focus-visible { transform: translateY(-4px); border-color: #A9C9B2; box-shadow: var(--shadow-lg); }
+    a.module-card:hover::before, a.module-card:focus-visible::before { opacity: 1; width: 5px; }
+
+    /* ======================================================================
+       8. QUICK ACCESS
+       ====================================================================== */
+    .quick-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 225px), 1fr)); gap: 14px; }
+    .quick-link {
+      display: flex; align-items: center; gap: 14px; min-height: 82px; padding: 16px 18px;
+      border: 1px solid #D6E5DA; border-radius: 12px; background: #fff; text-decoration: none;
+      transition: transform .24s ease, border-color .24s ease, box-shadow .24s ease, background .24s ease;
+    }
+    .quick-link__icon { width: 42px; height: 42px; flex: none; border-radius: 10px; display: grid; place-items: center; background: var(--green-800); color: #E3F2E6; }
+    .quick-link__icon .icon { width: 20px; height: 20px; }
+    .quick-link__text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+    .quick-link strong { color: var(--green-900); font-size: .82rem; font-weight: 750; line-height: 1.3; }
+    .quick-link small { color: var(--muted); font-size: .7rem; line-height: 1.35; }
+    .quick-link .icon--arrow { width: 16px; height: 16px; margin-left: auto; color: var(--green-600); transition: transform .24s ease; }
+    .quick-link:hover, .quick-link:focus-visible { transform: translateY(-3px); background: var(--sage-soft); border-color: #A9C9B2; box-shadow: var(--shadow-sm); }
+    .quick-link:hover .icon--arrow, .quick-link:focus-visible .icon--arrow { transform: translate(3px, -3px); }
+
+    /* ======================================================================
+       9. FOOTER
+       ====================================================================== */
+    .footer { position: relative; overflow: hidden; background: linear-gradient(180deg, #103A2D, #0B2E24); color: #fff; }
+    .footer__decor { position: absolute; inset: 0; pointer-events: none; opacity: .55; }
+    .footer__decor svg { width: 100%; height: 100%; }
+    .footer__inner {
+      position: relative; z-index: 1; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+      gap: clamp(30px, 5vw, 70px); padding-block: clamp(48px, 6vw, 72px);
+    }
+    .footer h2 { margin: 0; max-width: 24ch; font-size: clamp(1.2rem, 2.4vw, 1.65rem); font-weight: 750; line-height: 1.35; }
+    .footer__lead { margin: 16px 0 0; max-width: 52ch; color: rgba(255,255,255,.66); font-size: .9rem; line-height: 1.75; }
+    .footer__label { margin: 0 0 18px; font-size: .64rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: #A8D8B6; }
+    .partner-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+    .partner { display: flex; align-items: center; gap: 10px; padding: 12px; border: 1px solid rgba(255,255,255,.13); border-radius: 10px; background: rgba(255,255,255,.035); }
+    .partner__logo {
+      width: 34px; height: 34px; flex: none; border: 1px dashed rgba(255,255,255,.35); border-radius: 8px;
+      display: grid; place-items: center; font-family: var(--mono); font-size: .64rem; font-weight: 700; color: #BFE6C7;
+    }
+    .partner__name { display: block; font-size: .73rem; font-weight: 650; line-height: 1.3; }
+    .partner__role { display: block; margin-top: 3px; font-size: .61rem; color: rgba(255,255,255,.5); }
+    .footer__bottom {
+      position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px;
+      border-top: 1px solid rgba(255,255,255,.12); padding-block: 18px;
+      font-size: .68rem; color: rgba(255,255,255,.55);
+    }
+    .footer__bottom a { color: #BFE6C7; font-weight: 700; letter-spacing: .08em; text-decoration: none; text-transform: uppercase; }
+    .footer__bottom a:hover { text-decoration: underline; }
+    .footer__coords { font-family: var(--mono); font-size: .62rem; letter-spacing: .08em; }
+
+    /* ======================================================================
+       10. TOAST (used when a URL has not been configured yet)
+       ====================================================================== */
+    .toast {
+      position: fixed; z-index: 100; left: 50%; bottom: 22px;
+      transform: translate(-50%, 16px); max-width: min(92vw, 520px);
+      padding: 13px 18px; border-radius: 10px; background: var(--green-900); color: #fff;
+      box-shadow: 0 16px 40px rgba(0,0,0,.25); font-size: .8rem; line-height: 1.5;
+      opacity: 0; pointer-events: none; transition: opacity .25s ease, transform .25s ease;
+    }
+    .toast.is-visible { opacity: 1; transform: translate(-50%, 0); }
+
+    /* ======================================================================
+       11. RESPONSIVE
+       ====================================================================== */
+    @media (max-width: 980px) {
+      .hero__inner { grid-template-columns: minmax(0, 1fr); gap: 44px; }
+      .hero__visual { width: 100%; max-width: 600px; margin-inline: auto; }
+      .footer__inner { grid-template-columns: minmax(0, 1fr); }
+    }
+    @media (max-width: 760px) {
+      .header-nav, .header-status { display: none; }
+      .section-head { flex-direction: column; align-items: flex-start; gap: 16px; }
+      .section-head__lead { max-width: none; }
+    }
+    @media (max-width: 520px) {
+      .container { padding-inline: 18px; }
+      .hero h1 { font-size: clamp(2.05rem, 10vw, 2.8rem); }
+      .hero__actions { flex-direction: column; align-items: stretch; }
+      .resource-card, .module-card { min-height: 0; }
+      .quick-link { min-height: 74px; padding: 14px; }
+      .footer__bottom { justify-content: center; text-align: center; }
+      .map-card__foot { font-size: .48rem; }
+    }
+
+    /* Subtle scroll reveal — only enabled when JS and motion are available. */
+    @media (prefers-reduced-motion: no-preference) {
+      body.js-animate [data-reveal] { opacity: 0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+      body.js-animate [data-reveal].is-visible { opacity: 1; transform: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <!-- Icon library: inline SVG symbols, no external requests. -->
+  <svg width="0" height="0" style="position:absolute;overflow:hidden" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 2 9 5-9 5-9-5 9-5Z"/><path d="m3 12 9 5 9-5"/><path d="m3 17 9 5 9-5"/></symbol>
+      <symbol id="i-database" viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4.03 3 9 3s9-1.34 9-3V5"/><path d="M3 12c0 1.66 4.03 3 9 3s9-1.34 9-3"/></symbol>
+      <symbol id="i-presentation" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 12v-2M12 12V8M17 12V6"/></symbol>
+      <symbol id="i-package" viewBox="0 0 24 24"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5Z"/><path d="m3 7 9 5 9-5"/><path d="M12 12v10"/><path d="m7.5 4.5 9 5"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></symbol>
+      <symbol id="i-book" viewBox="0 0 24 24"><path d="M12 7v14"/><path d="M3 18a4 4 0 0 1 4-4h5v7H7a4 4 0 0 1-4-3Z"/><path d="M21 18a4 4 0 0 0-4-4h-5v7h5a4 4 0 0 0 4-3Z"/></symbol>
+      <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></symbol>
+      <symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M9 4H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-3"/><path d="M9 12h6M9 16h6M9 8h2"/></symbol>
+      <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12Z"/></symbol>
+      <symbol id="i-crosshair" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+      <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="19" r="3"/><circle cx="18" cy="5" r="3"/><path d="M8.2 17.4 14 12a4 4 0 0 0 0-6M10 8H6a3 3 0 0 1 0-6h2"/></symbol>
+      <symbol id="i-map" viewBox="0 0 24 24"><path d="m3 6 6-3 6 3 6-3v15l-6 3-6-3-6 3V6Z"/><path d="M9 3v15M15 6v15"/></symbol>
+      <symbol id="i-arrow-right" viewBox="0 0 24 24"><path d="M5 12h14"/><path d="m13 6 6 6-6 6"/></symbol>
+      <symbol id="i-arrow-up-right" viewBox="0 0 24 24"><path d="M7 17 17 7"/><path d="M8 7h9v9"/></symbol>
+      <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="M12 19V5"/><path d="m6 11 6-6 6 6"/></symbol>
+      <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></symbol>
+      <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="3"/></symbol>
+      <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h6"/></symbol>
+      <symbol id="i-activity" viewBox="0 0 24 24"><path d="M3 12h4l3-8 4 16 3-8h4"/></symbol>
+      <symbol id="i-contour" viewBox="0 0 24 24"><circle cx="8" cy="8" r="5"/><circle cx="8" cy="8" r="2"/><path d="m12 20 4-6 3 4 2-3 3 5H12"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- =====================================================================
+       HEADER
+       ====================================================================== -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#top" aria-label="LRBI GIS Portal — back to top">
+        <span class="brand__mark" aria-hidden="true"><svg class="icon"><use href="#i-layers"/></svg></span>
+        <span class="brand__text">
+          <span class="brand__name">LRBI · GIS PORTAL</span>
+          <span class="brand__sub">QGIS Advanced Training</span>
+        </span>
+      </a>
+      <div class="header-tools">
+        <span class="header-status"><span class="chip-dot" aria-hidden="true"></span> Resource portal</span>
+        <nav class="header-nav" aria-label="Section navigation">
+          <a href="#resources">Resources</a>
+          <a href="#modules">Modules</a>
+          <a href="#quick-access">Quick Access</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ===================================================================
+         HERO
+         =================================================================== -->
+    <section class="hero" id="top" aria-labelledby="hero-title">
+      <div class="hero__decor" aria-hidden="true">
+        <svg viewBox="0 0 1440 620" preserveAspectRatio="xMidYMid slice">
+          <defs>
+            <pattern id="heroGrid" width="48" height="48" patternUnits="userSpaceOnUse">
+              <path d="M48 0H0V48" fill="none" stroke="#FFFFFF" stroke-opacity=".045" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="1440" height="620" fill="url(#heroGrid)"/>
+          <g fill="none" stroke="#A8D8B6" stroke-opacity=".10" stroke-width="1.2">
+            <path d="M-40 110 C 180 30 320 220 540 120 S 900 20 1120 130 S 1360 200 1500 90"/>
+            <path d="M-40 128 C 180 48 320 238 540 138 S 900 38 1120 148 S 1360 218 1500 108"/>
+            <path d="M-40 146 C 180 66 320 256 540 156 S 900 56 1120 166 S 1360 236 1500 126"/>
+            <path d="M-40 164 C 180 84 320 274 540 174 S 900 74 1120 184 S 1360 254 1500 144"/>
+            <path d="M-40 470 C 200 420 380 530 640 455 S 1080 375 1500 470"/>
+            <path d="M-40 488 C 200 438 380 548 640 473 S 1080 393 1500 488"/>
+          </g>
+          <g fill="none" stroke="#7FD3A6" stroke-opacity=".14" stroke-width="1.4" stroke-dasharray="8 10">
+            <path d="M-20 520 C 260 470 380 570 640 500 S 1080 430 1460 520"/>
+            <path d="M120 640 C 260 520 420 580 600 500 S 980 380 1300 440"/>
+          </g>
+          <g fill="#BFE6C7" fill-opacity=".35">
+            <circle cx="290" cy="112" r="3"/><circle cx="742" cy="96" r="3"/><circle cx="1120" cy="130" r="3"/>
+            <circle cx="410" cy="506" r="3"/><circle cx="960" cy="442" r="3"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="container hero__inner">
+        <div class="hero__copy" data-reveal>
+          <p class="eyebrow eyebrow--light"><span class="eyebrow__dot" aria-hidden="true"></span> GIS Training Resource Portal</p>
+          <h1 id="hero-title">QGIS <span>Advanced Training</span></h1>
+          <div class="hero__rule" aria-hidden="true"></div>
+          <p class="hero__subtitle">Local Roads and Bridges Inventory (LRBI)</p>
+          <p class="hero__lead">Your central hub for training materials, spatial datasets, presentations, and GIS resources.</p>
+          <div class="hero__actions">
+            <a class="btn btn--primary" href="#resources">Explore Resources <svg class="icon" aria-hidden="true"><use href="#i-arrow-right"/></svg></a>
+            <a class="btn btn--ghost" href="#modules">View Modules</a>
+          </div>
+          <ul class="hero__meta" aria-label="Portal summary">
+            <li><span id="statModules">4</span> Training modules</li>
+            <li><span id="statLibraries">3</span> Resource libraries</li>
+            <li>Self-paced access</li>
+          </ul>
+        </div>
+
+        <div class="hero__visual" data-reveal>
+          <div class="map-card">
+            <div class="map-card__chip"><span class="chip-dot" aria-hidden="true"></span> LRBI COVERAGE</div>
+            <svg class="map-svg" viewBox="0 0 480 420" role="img" aria-labelledby="mapTitle mapDesc">
+              <title id="mapTitle">Stylized map of the Philippines with an LRBI spatial network</title>
+              <desc id="mapDesc">A stylized geographic illustration of the Philippines showing island outlines, a road network, and highlighted inventory nodes.</desc>
+              <defs>
+                <pattern id="mapGrid" width="24" height="24" patternUnits="userSpaceOnUse">
+                  <path d="M24 0H0V24" fill="none" stroke="#FFFFFF" stroke-opacity=".07" stroke-width="1"/>
+                </pattern>
+                <linearGradient id="landGrad" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#2C8C85" stop-opacity=".45"/>
+                  <stop offset="1" stop-color="#164B3B" stop-opacity=".55"/>
+                </linearGradient>
+              </defs>
+              <rect width="480" height="420" fill="#10382C"/>
+              <rect width="480" height="420" fill="url(#mapGrid)"/>
+              <g fill="none" stroke="#8FCBA4" stroke-opacity=".13" stroke-width="1">
+                <path d="M-30 80 C 80 30 160 140 270 70 S 430 30 510 90"/>
+                <path d="M-30 98 C 80 48 160 158 270 88 S 430 48 510 108"/>
+                <path d="M-30 116 C 80 66 160 176 270 106 S 430 66 510 126"/>
+                <path d="M-30 300 C 90 250 170 350 280 290 S 440 250 510 310"/>
+                <path d="M-30 318 C 90 268 170 368 280 308 S 440 268 510 328"/>
+                <path d="M-30 336 C 90 286 170 386 280 326 S 440 286 510 346"/>
+              </g>
+              <g transform="translate(20 20) scale(1.2)">
+                <g fill="url(#landGrad)" stroke="#A9D8B4" stroke-opacity=".85" stroke-width="1.4" stroke-linejoin="round">
+                  <path d="M120 36 L140 40 L152 52 L168 56 L178 68 L172 82 L184 92 L180 106 L168 116 L174 130 L164 142 L168 158 L158 172 L152 190 L142 208 L134 202 L138 184 L130 170 L126 152 L116 140 L110 124 L100 112 L106 96 L98 84 L104 66 L110 48 Z"/>
+                  <path d="M96 210 L104 206 L134 248 L127 256 L92 218 Z"/>
+                  <path d="M156 196 L172 192 L178 204 L170 214 L156 210 Z"/>
+                  <path d="M182 198 L191 201 L192 219 L183 222 L179 211 Z"/>
+                  <path d="M197 205 L203 209 L209 227 L203 231 Z"/>
+                  <path d="M212 190 L230 186 L238 196 L226 206 L214 202 Z"/>
+                  <circle cx="204" cy="196" r="4"/><circle cx="190" cy="230" r="3"/>
+                  <path d="M224 238 L246 230 L268 236 L284 248 L296 262 L288 276 L274 282 L280 296 L268 310 L248 312 L232 304 L220 288 L226 272 L214 258 Z"/>
+                </g>
+                <g fill="none" stroke="#BFE6C7" stroke-opacity=".85" stroke-width="1.8" stroke-linecap="round">
+                  <path d="M128 52 C 142 70 150 86 150 104 C 150 126 160 140 150 160 C 145 178 142 190 138 200"/>
+                  <path d="M230 244 C 250 240 274 250 286 264 C 276 278 260 286 244 300"/>
+                  <path class="map-route--flow" d="M138 200 C 158 210 180 204 196 214 C 212 224 216 232 230 244" stroke-dasharray="6 7"/>
+                </g>
+                <g class="map-nodes">
+                  <g class="map-node" transform="translate(150 104)"><circle class="map-node__pulse" r="9"/><circle class="map-node__dot" r="4.5"/></g>
+                  <g class="map-node" transform="translate(138 200)"><circle class="map-node__pulse" r="9"/><circle class="map-node__dot" r="4.5"/></g>
+                  <g class="map-node" transform="translate(196 214)"><circle class="map-node__pulse" r="9"/><circle class="map-node__dot" r="4.5"/></g>
+                  <g class="map-node" transform="translate(250 250)"><circle class="map-node__pulse" r="9"/><circle class="map-node__dot" r="4.5"/></g>
+                  <g class="map-node" transform="translate(286 264)"><circle class="map-node__pulse" r="9"/><circle class="map-node__dot" r="4.5"/></g>
+                </g>
+              </g>
+              <g fill="none" stroke="#BFE6C7" stroke-opacity=".45" stroke-width="1.5">
+                <path d="M18 34V18H34"/><path d="M462 34V18H446"/><path d="M18 386V402H34"/><path d="M462 386V402H446"/>
+              </g>
+              <g transform="translate(432 62)">
+                <circle r="16" fill="none" stroke="#BFE6C7" stroke-opacity=".5"/>
+                <path d="M0 -11 L4 0 L0 11 L-4 0 Z" fill="#BFE6C7" fill-opacity=".75"/>
+                <text x="0" y="-23" text-anchor="middle" fill="#BFE6C7" fill-opacity=".85" stroke="none" font-size="9" font-family="monospace">N</text>
+              </g>
+              <text x="452" y="32" text-anchor="end" fill="#BFE6C7" fill-opacity=".55" stroke="none" font-size="9" font-family="monospace">14.5995° N · 120.9842° E</text>
+              <text x="452" y="398" text-anchor="end" fill="#BFE6C7" fill-opacity=".55" stroke="none" font-size="9" font-family="monospace">6.9211° N · 122.0790° E</text>
+              <g transform="translate(28 370)">
+                <path d="M0 0h28v5H0z" fill="#BFE6C7" fill-opacity=".32"/>
+                <path d="M28 0h28v5H28z" fill="none" stroke="#BFE6C7" stroke-opacity=".6"/>
+                <text x="0" y="-8" fill="#BFE6C7" fill-opacity=".7" stroke="none" font-size="8" font-family="monospace">0</text>
+                <text x="56" y="-8" text-anchor="end" fill="#BFE6C7" fill-opacity=".7" stroke="none" font-size="8" font-family="monospace">100 km</text>
+              </g>
+            </svg>
+            <div class="map-card__foot"><span>STYLIZED MAP · NOT TO SCALE</span><span>WGS 84 / EPSG:4326</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero__strip">
+        <div class="container">
+          <span>PH · LRBI</span><span>GRID REF: 51N</span><span>DATUM: WGS 84</span><span>PROJECTION: UTM</span><span>MODULE-BASED LEARNING</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         RESOURCE NAVIGATION
+         Each entire card is one link. Only href values come from TRAINING_CONFIG.
+         =================================================================== -->
+    <section class="section" id="resources" aria-labelledby="resources-title">
+      <div class="container">
+        <header class="section-head" data-reveal>
+          <div>
+            <p class="eyebrow"><span class="eyebrow__line" aria-hidden="true"></span> Resource Libraries</p>
+            <h2 id="resources-title">Find the materials you need</h2>
+            <p class="section-head__lead">Three organized libraries give participants direct access to every dataset, discussion, and downloadable GIS asset used in the training.</p>
+          </div>
+          <span class="count-chip" id="countLibraries">03 / LIBRARIES</span>
+        </header>
+
+        <div class="resource-grid">
+          <!-- CARD 1 — DATA -->
+          <a class="resource-card" href="#" data-link-key="dataUrl" data-link-label="Data library" aria-label="Data — explore training datasets and spatial layers" data-reveal>
+            <span class="resource-card__accent" aria-hidden="true"></span>
+            <svg class="resource-card__watermark" aria-hidden="true" focusable="false"><use href="#i-layers"/></svg>
+            <span class="resource-card__top">
+              <span class="icon-tile icon-tile--data" aria-hidden="true"><svg class="icon"><use href="#i-database"/></svg></span>
+              <span class="resource-card__index">01</span>
+            </span>
+            <span class="resource-card__body">
+              <span class="resource-card__title">Data</span>
+              <span class="resource-card__desc">Access training datasets, spatial layers, shapefiles, geodatabases, and other reference data required for GIS exercises.</span>
+            </span>
+            <span class="resource-card__foot">
+              <span class="card-action">Explore Data <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+            </span>
+          </a>
+
+          <!-- CARD 2 — PRESENTATIONS -->
+          <a class="resource-card" href="#" data-link-key="presentationsUrl" data-link-label="Presentations library" aria-label="Presentations — view training slides and instructional materials" data-reveal>
+            <span class="resource-card__accent" aria-hidden="true"></span>
+            <svg class="resource-card__watermark" aria-hidden="true" focusable="false"><use href="#i-file"/></svg>
+            <span class="resource-card__top">
+              <span class="icon-tile icon-tile--pres" aria-hidden="true"><svg class="icon"><use href="#i-presentation"/></svg></span>
+              <span class="resource-card__index">02</span>
+            </span>
+            <span class="resource-card__body">
+              <span class="resource-card__title">Presentations</span>
+              <span class="resource-card__desc">Browse training presentations, lecture materials, module discussions, and step-by-step instructional guides.</span>
+            </span>
+            <span class="resource-card__foot">
+              <span class="card-action">View Presentations <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+            </span>
+          </a>
+
+          <!-- CARD 3 — ASSETS -->
+          <a class="resource-card" href="#" data-link-key="assetsUrl" data-link-label="Assets library" aria-label="Assets — access QGIS projects, plugins, templates, and downloads" data-reveal>
+            <span class="resource-card__accent" aria-hidden="true"></span>
+            <svg class="resource-card__watermark" aria-hidden="true" focusable="false"><use href="#i-package"/></svg>
+            <span class="resource-card__top">
+              <span class="icon-tile icon-tile--assets" aria-hidden="true"><svg class="icon"><use href="#i-package"/></svg></span>
+              <span class="resource-card__index">03</span>
+            </span>
+            <span class="resource-card__body">
+              <span class="resource-card__title">Assets</span>
+              <span class="resource-card__desc">Access QGIS project files, plugins, templates, style files, supplementary materials, and other downloadable resources.</span>
+            </span>
+            <span class="resource-card__foot">
+              <span class="card-action">Access Assets <svg class="icon icon--sm" aria-hidden="true"><use href="#i-arrow-right"/></svg></span>
+            </span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         TRAINING MODULES — rendered from TRAINING_CONFIG.modules
+         Add a module by adding one object to that array.
+         =================================================================== -->
+    <section class="section section--tinted" id="modules" aria-labelledby="modules-title">
+      <div class="container">
+        <header class="section-head" data-reveal>
+          <div>
+            <p class="eyebrow"><span class="eyebrow__line" aria-hidden="true"></span> Learning Pathway</p>
+            <h2 id="modules-title">Training modules</h2>
+            <p class="section-head__lead">A progressive curriculum from GIS fundamentals to map production. Module cards can link to their own pages when a URL is set.</p>
+          </div>
+          <span class="count-chip" id="countModules">04 / MODULES</span>
+        </header>
+        <div class="module-grid" id="moduleGrid"></div>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         QUICK ACCESS — rendered from TRAINING_CONFIG.quickLinks
+         =================================================================== -->
+    <section class="section" id="quick-access" aria-labelledby="quick-title">
+      <div class="container">
+        <header class="section-head" data-reveal>
+          <div>
+            <p class="eyebrow"><span class="eyebrow__line" aria-hidden="true"></span> Shortcuts</p>
+            <h2 id="quick-title">Quick access</h2>
+            <p class="section-head__lead">Frequently used tools and references, one click away.</p>
+          </div>
+        </header>
+        <div class="quick-grid" id="quickGrid"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- =====================================================================
+       FOOTER
+       ====================================================================== -->
+  <footer class="footer">
+    <div class="footer__decor" aria-hidden="true">
+      <svg viewBox="0 0 1440 320" preserveAspectRatio="xMidYMid slice">
+        <g fill="none" stroke="#A8D8B6" stroke-opacity=".12" stroke-width="1.2">
+          <path d="M-30 40 C 180 -10 340 110 560 50 S 940 -10 1160 60 S 1380 120 1500 40"/>
+          <path d="M-30 58 C 180 8 340 128 560 68 S 940 8 1160 78 S 1380 138 1500 58"/>
+          <path d="M-30 76 C 180 26 340 146 560 86 S 940 26 1160 96 S 1380 156 1500 76"/>
+          <path d="M-30 250 C 200 210 380 310 640 245 S 1080 175 1500 260"/>
+          <path d="M-30 268 C 200 228 380 328 640 263 S 1080 193 1500 278"/>
+        </g>
+      </svg>
+    </div>
+    <div class="container footer__inner">
+      <div data-reveal>
+        <h2>QGIS Advanced Training for Local Roads and Bridges Inventory (LRBI)</h2>
+        <p class="footer__lead">Empowering local development planning through geospatial information and technology.</p>
+      </div>
+      <div data-reveal>
+        <p class="footer__label">Organizing Institutions</p>
+        <div class="partner-grid" id="partnerGrid"></div>
+      </div>
+    </div>
+    <div class="container footer__bottom">
+      <span>&copy; <span id="year">2026</span> LRBI GIS Training Resource Portal</span>
+      <span class="footer__coords">EPSG:4326 · WGS 84</span>
+      <a href="#top">Back to top <svg class="icon icon--xs" style="display:inline-block;vertical-align:-2px" aria-hidden="true"><use href="#i-arrow-up"/></svg></a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+
+  <script>
+    /* ========================================================================
+       REPLACE YOUR GOOGLE SITES URLS HERE
+       ------------------------------------------------------------------------
+       This is the ONLY place you need to edit links.
+       1. Publish the relevant page in Google Sites and copy its full URL.
+       2. Paste it between the quotes below, replacing INSERT_..._URL.
+       3. Leave a value as "#" if the link is not ready yet — the portal will
+          show a small notice instead of navigating to a broken destination.
+       ======================================================================== */
+    const TRAINING_CONFIG = {
+      /* ---- Google Sites page links (EDIT THESE THREE) -------------------- */
+      dataUrl: "INSERT_DATA_PAGE_URL",
+      presentationsUrl: "INSERT_PRESENTATIONS_PAGE_URL",
+      assetsUrl: "INSERT_ASSETS_PAGE_URL",
+
+      /* ---- Public reference links --------------------------------------- */
+      qgisDownloadUrl: "https://qgis.org/download/",
+      documentationUrl: "https://docs.qgis.org/",
+      scheduleUrl: "#",
+      exercisesUrl: "#",
+
+      /* ---- Link behaviour ------------------------------------------------ */
+      // true  = open resource links in a new tab (best inside Google Sites)
+      // false = navigate in the same frame
+      openInNewTab: true,
+
+      /* ---- Training modules (duplicate an object to add a module) ------- */
+      modules: [
+        {
+          title: "Local Roads and Bridges Inventory and GIS Fundamentals",
+          description: "Introduction to LRBI, coordinate systems, the QGIS interface, and core geospatial concepts.",
+          icon: "compass",
+          url: "#"
+        },
+        {
+          title: "Advanced GIS Data Management and Processing",
+          description: "Organizing, importing, validating, and preparing road and bridge datasets for analysis.",
+          icon: "layers",
+          url: "#"
+        },
+        {
+          title: "Spatial Analysis and LRBI Applications",
+          description: "Applying spatial tools to assess inventory gaps, accessibility, and road conditions.",
+          icon: "crosshair",
+          url: "#"
+        },
+        {
+          title: "Map Production, Visualization, and Reporting",
+          description: "Designing map layouts, communicating results, and producing report-ready outputs.",
+          icon: "map",
+          url: "#"
+        }
+      ],
+
+      /* ---- Quick access shortcuts (linkKey must match a key above) ------ */
+      quickLinks: [
+        { linkKey: "qgisDownloadUrl", label: "Download QGIS", note: "Install the latest release", icon: "download" },
+        { linkKey: "documentationUrl", label: "QGIS Documentation", note: "Official guides and manuals", icon: "book" },
+        { linkKey: "scheduleUrl", label: "Training Schedule", note: "Session dates and agenda", icon: "calendar" },
+        { linkKey: "exercisesUrl", label: "Exercise Instructions", note: "Step-by-step lab sheets", icon: "clipboard" }
+      ],
+
+      /* ---- Attribution placeholders ------------------------------------- */
+      partners: [
+        { initials: "DILG", name: "Organizing Institution", role: "Lead agency" },
+        { initials: "LGU", name: "Partner Agency", role: "Local government" },
+        { initials: "GIS", name: "Technical Support", role: "Training team" }
+      ]
+    };
+
+    (function () {
+      "use strict";
+
+      const CONFIG = TRAINING_CONFIG;
+
+      function node(tag, className, text) {
+        const element = document.createElement(tag);
+        if (className) element.className = className;
+        if (text != null) element.textContent = text;
+        return element;
+      }
+
+      function icon(name, extraClass) {
+        const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svg.setAttribute("class", "icon" + (extraClass ? " " + extraClass : ""));
+        svg.setAttribute("aria-hidden", "true");
+        svg.setAttribute("focusable", "false");
+        const use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+        use.setAttribute("href", "#i-" + (name || "grid"));
+        svg.appendChild(use);
+        return svg;
+      }
+
+      function setText(id, value) {
+        const element = document.getElementById(id);
+        if (element) element.textContent = value;
+      }
+
+      function isConfigured(url) {
+        if (typeof url !== "string") return false;
+        const value = url.trim();
+        if (!value || value === "#") return false;
+        return !/INSERT[_ -]/i.test(value) && !/\[INSERT/i.test(value);
+      }
+
+      function applyLink(element, url, label) {
+        if (!element) return;
+        if (isConfigured(url)) {
+          const samePage = /^#/.test(url.trim());
+          element.setAttribute("href", url);
+          if (CONFIG.openInNewTab && !samePage) {
+            element.setAttribute("target", "_blank");
+            element.setAttribute("rel", "noopener noreferrer");
+          } else {
+            element.removeAttribute("target");
+            element.removeAttribute("rel");
+          }
+          const name = label || (element.getAttribute("aria-label") || element.textContent || "").replace(/\s+/g, " ").trim();
+          element.setAttribute("aria-label", name + (CONFIG.openInNewTab && !samePage ? " (opens in a new tab)" : ""));
+          element.classList.remove("is-unconfigured");
+        } else {
+          element.setAttribute("href", "#");
+          element.removeAttribute("target");
+          element.removeAttribute("rel");
+          element.classList.add("is-unconfigured");
+          element.dataset.pendingLabel = label || element.getAttribute("aria-label") || "This link";
+        }
+      }
+
+      /* Notify editors when a placeholder link is clicked. */
+      let toastTimer;
+      function showToast(message) {
+        const toast = document.getElementById("toast");
+        if (!toast) return;
+        toast.textContent = message;
+        toast.hidden = false;
+        requestAnimationFrame(function () { toast.classList.add("is-visible"); });
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          toast.classList.remove("is-visible");
+          setTimeout(function () { toast.hidden = true; }, 300);
+        }, 4200);
+      }
+
+      document.addEventListener("click", function (event) {
+        const link = event.target && event.target.closest ? event.target.closest("a.is-unconfigured") : null;
+        if (!link) return;
+        event.preventDefault();
+        const label = link.dataset.linkLabel || link.dataset.pendingLabel || "This link";
+        showToast(label + " — set its URL in TRAINING_CONFIG (index.html).");
+      });
+
+      /* Wire the three static resource cards to the configuration object. */
+      document.querySelectorAll("[data-link-key]").forEach(function (element) {
+        const key = element.getAttribute("data-link-key");
+        applyLink(element, CONFIG[key], element.getAttribute("aria-label") || element.getAttribute("data-link-label"));
+      });
+
+      function toRoman(number) {
+        const values = [[1000,"M"],[900,"CM"],[500,"D"],[400,"CD"],[100,"C"],[90,"XC"],[50,"L"],[40,"XL"],[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]];
+        let result = "", remaining = number;
+        values.forEach(function (pair) {
+          while (remaining >= pair[0]) { result += pair[1]; remaining -= pair[0]; }
+        });
+        return result;
+      }
+
+      /* Render modules — add entries to TRAINING_CONFIG.modules to extend. */
+      const modules = Array.isArray(CONFIG.modules) ? CONFIG.modules : [];
+      const moduleHost = document.getElementById("moduleGrid");
+      modules.forEach(function (item, index) {
+        if (!moduleHost) return;
+        const linked = isConfigured(item.url);
+        const card = document.createElement(linked ? "a" : "article");
+        card.className = "module-card";
+        card.setAttribute("data-reveal", "");
+
+        const head = node("div", "module-card__head");
+        head.appendChild(node("span", "module-card__num", item.number || toRoman(index + 1)));
+        const iconBox = node("span", "module-card__icon");
+        iconBox.appendChild(icon(item.icon || "layers"));
+        head.appendChild(iconBox);
+        card.appendChild(head);
+        card.appendChild(node("h3", "", item.title || "Module " + (index + 1)));
+        card.appendChild(node("p", "", item.description || ""));
+        const total = String(modules.length).padStart(2, "0");
+        card.appendChild(node("span", "module-card__tag", "MODULE " + String(index + 1).padStart(2, "0") + " / " + total));
+        if (linked) applyLink(card, item.url, item.title);
+        moduleHost.appendChild(card);
+      });
+
+      /* Render quick access shortcuts. */
+      const quickHost = document.getElementById("quickGrid");
+      (CONFIG.quickLinks || []).forEach(function (item) {
+        if (!quickHost) return;
+        const link = node("a", "quick-link");
+        link.setAttribute("data-reveal", "");
+        const iconBox = node("span", "quick-link__icon");
+        iconBox.appendChild(icon(item.icon || "grid"));
+        const text = node("span", "quick-link__text");
+        text.appendChild(node("strong", "", item.label || "Link"));
+        text.appendChild(node("small", "", item.note || ""));
+        link.appendChild(iconBox);
+        link.appendChild(text);
+        link.appendChild(icon("arrow-up-right", "icon--arrow"));
+        applyLink(link, CONFIG[item.linkKey], item.label);
+        quickHost.appendChild(link);
+      });
+
+      /* Render attribution placeholders. */
+      const partnerHost = document.getElementById("partnerGrid");
+      (CONFIG.partners || []).forEach(function (item) {
+        if (!partnerHost) return;
+        const partner = node("div", "partner");
+        const logo = node("span", "partner__logo", item.initials || "LOGO");
+        logo.setAttribute("aria-hidden", "true");
+        const details = node("span");
+        details.appendChild(node("span", "partner__name", item.name || "Institution name"));
+        details.appendChild(node("span", "partner__role", item.role || "Role"));
+        partner.appendChild(logo);
+        partner.appendChild(details);
+        partnerHost.appendChild(partner);
+      });
+
+      setText("statModules", modules.length);
+      setText("countModules", String(modules.length).padStart(2, "0") + " / MODULES");
+      setText("year", new Date().getFullYear());
+
+      /* Subtle scroll reveal with a safety fallback for embedded iframes. */
+      if ("IntersectionObserver" in window && !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches)) {
+        document.body.classList.add("js-animate");
+        const observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("is-visible");
+              observer.unobserve(entry.target);
+            }
+          });
+        }, { rootMargin: "0px 0px -40px 0px", threshold: 0.05 });
+        document.querySelectorAll("[data-reveal]").forEach(function (element) { observer.observe(element); });
+        setTimeout(function () {
+          document.querySelectorAll("[data-reveal]:not(.is-visible)").forEach(function (element) { element.classList.add("is-visible"); });
+        }, 2500);
+      }
+    })();
+  </script>
+</body>
+</html>
+
